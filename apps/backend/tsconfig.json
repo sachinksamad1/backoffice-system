@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
+  "compilerOptions": {
+     "types": ["node", "express"],
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0"
+  }
+}

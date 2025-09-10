@@ -1,0 +1,22 @@
+<div class="p-6">
+  <h1 class="text-xl font-bold mb-4">Manage Users</h1>
+  <table class="w-full border border-gray-300 rounded">
+    <thead class="bg-gray-100">
+      <tr>
+        <th class="p-2 border">Name</th>
+        <th class="p-2 border">Role</th>
+        <th class="p-2 border">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td class="p-2 border">{{ user.name }}</td>
+        <td class="p-2 border">{{ user.role }}</td>
+        <td class="p-2 border text-center">
+          <button class="bg-yellow-500 text-white px-2 py-1 rounded">Edit</button>
+          <button class="bg-red-500 text-white px-2 py-1 rounded ml-2">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
