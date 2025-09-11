@@ -36,8 +36,8 @@ router.post('/attendance/checkout', async (req: AuthRequest, res: Response) => {
 });
 
 // Get tasks
-router.get('/tasks', async (req: AuthRequest, res: Response) => {
-  const tasks = await Task.find({ assignedTo: req.user?._id });
+router.get('/tasks', async (req, res) => {
+  const tasks = await Task.find({ assignedTo: (req as any).user._id });
   res.json(tasks);
 });
 

@@ -17,10 +17,15 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/auth', authRoutes);
-app.use('/admin', adminRoutes);
-app.use('/manager', managerRoutes);
-app.use('/staff', staffRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/manager', managerRoutes);
+app.use('/api/staff', staffRoutes);
+// Test endpoint
+app.get('/test', (req, res) => {
+    res.send('Hello World from Express!');
+    console.log('Test endpoint was called');
+  });
 
 // Start server
 connectDB().then(() => {

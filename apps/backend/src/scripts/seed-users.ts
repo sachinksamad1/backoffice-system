@@ -16,9 +16,9 @@ async function seedUsers() {
     // Base users
     const baseUsers = [
       {
-        name: 'Admin User',
+        username: 'Admin User',
         email: 'admin@example.com',
-        password: 'password123',
+        passwordHash: 'password123',
         role: 'admin',
         department: null,
       },
@@ -26,9 +26,9 @@ async function seedUsers() {
 
     // Managers per department
     const managers = departments.map((dept) => ({
-      name: `${dept.toUpperCase()} Manager`,
+      username: `${dept.toUpperCase()} Manager`,
       email: `${dept}.manager@example.com`,
-      password: 'password123',
+      passwordHash: 'password123',
       role: 'manager',
       department: dept,
     }));
@@ -36,16 +36,16 @@ async function seedUsers() {
     // Staff per department (2 staff each as example)
     const staff = departments.flatMap((dept, i) => [
       {
-        name: `${dept.toUpperCase()} Staff 1`,
+        username: `${dept.toUpperCase()} Staff 1`,
         email: `${dept}.staff1@example.com`,
-        password: 'password123',
+        passwordHash: 'password123',
         role: 'staff',
         department: dept,
       },
       {
-        name: `${dept.toUpperCase()} Staff 2`,
+        username: `${dept.toUpperCase()} Staff 2`,
         email: `${dept}.staff2@example.com`,
-        password: 'password123',
+        passwordHash: 'password123',
         role: 'staff',
         department: dept,
       },
@@ -60,10 +60,10 @@ async function seedUsers() {
         continue;
       }
 
-      const hashedPassword = await bcrypt.hash(user.password, 10);
+      const hashedPassword = await bcrypt.hash(user.passwordHash, 10);
       await User.create({
         ...user,
-        password: hashedPassword,
+        passwordHash: hashedPassword,
       });
 
       console.log(`✅ Created user: ${user.email} (${user.role}, dept: ${user.department ?? 'N/A'})`);

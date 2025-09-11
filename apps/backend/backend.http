@@ -1,0 +1,67 @@
+@admin_token = eyJhbGciOi...    # paste JWT here
+@manager_token = eyJhbGciOi...
+@staff_token = eyJhbGciOi...
+@staff_id = 66f12345abcd6789ef01 # staff _id from MongoDB
+
+
+### 🔐 Admin Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+
+###
+
+### 👨‍💼 Manager Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "manager@example.com",
+  "password": "password123"
+}
+
+###
+
+### 👷 Staff Login
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "staff@example.com",
+  "password": "password123"
+}
+
+###
+
+### ✅ Admin - Get All Users
+GET http://localhost:3000/api/admin/users
+Authorization: Bearer {{admin_token}}
+
+###
+
+### ✅ Manager - Assign Task
+POST http://localhost:3000/api/manager/tasks
+Content-Type: application/json
+Authorization: Bearer {{manager_token}}
+
+{
+  "title": "Prepare Sales Report",
+  "description": "Complete by Friday",
+  "assignedTo": "{{staff_id}}"
+}
+
+###
+
+### ✅ Staff - Check-in Attendance
+POST http://localhost:3000/api/staff/attendance/checkin
+Authorization: Bearer {{staff_token}}
+
+###
+
+### ✅ Staff - Get My Tasks
+GET http://localhost:3000/api/staff/tasks
+Authorization: Bearer {{staff_token}}
