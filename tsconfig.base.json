@@ -19,7 +19,9 @@
     "paths": {
       "@backoffice-system/*": ["apps/backend/src/main.ts"],
       "@backoffice-system/api-client": ["libs/api-client/src/index.ts"],
-      "@backoffice-system/shared-ui": ["libs/shared-ui/src/index.ts"]
+      "@backoffice-system/login-form": ["libs/login-form/src/index.ts"],
+      "@backoffice-system/shared-ui": ["libs/shared-ui/src/index.ts"],
+      "@backoffice-system/ui-auth": ["libs/ui-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

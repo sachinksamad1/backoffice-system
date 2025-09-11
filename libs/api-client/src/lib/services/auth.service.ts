@@ -1,64 +1,70 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-
-export interface AuthResponse {
-  token: string;
-  user: {
-    _id: string;
-    username: string;
-    email: string;
-    role: 'admin' | 'manager' | 'staff';
-    departmentId?: string;
-  };
-}
+import { lastValueFrom } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/v1/auth'; // backend API
-  private currentUserSubject = new BehaviorSubject<AuthResponse['user'] | null>(null);
-  public currentUser$ = this.currentUserSubject.asObservable();
+  private http = inject(HttpClient);
+  private platformId = inject(PLATFORM_ID); // Inject PLATFORM_ID
+  private isBrowser: boolean;
+  private baseUrl = 'http://localhost:3000/auth';
 
-  constructor(private http: HttpClient, private router: Router) {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      this.currentUserSubject.next(JSON.parse(storedUser));
+  constructor() {
+    this.isBrowser = isPlatformBrowser(this.platformId); // Check if running in a browser
+  }
+
+  async login(email: string, password: string): Promise<boolean> {
+    try {
+      const res: any = await lastValueFrom(
+        this.http.post(`${this.baseUrl}/login`, { email, password })
+      );
+      if (this.isBrowser) {
+        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
+      }
+      return true;
+    } catch {
+      return false;
     }
   }
 
-  login(credentials: { email: string; password: string }): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((res) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user));
-        this.currentUserSubject.next(res.user);
-      })
-    );
+  logout() {
+    if (this.isBrowser) {
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+    }
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.currentUserSubject.next(null);
-    this.router.navigate(['/auth/login']);
+  getAccessToken() {
+    if (this.isBrowser) {
+      return localStorage.getItem('accessToken');
+    }
+    return null;
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  getRefreshToken() {
+    if (this.isBrowser) {
+      return localStorage.getItem('refreshToken');
+    }
+    return null;
   }
 
-  getCurrentUser() {
-    return this.currentUserSubject.value;
-  }
+  async refreshAccessToken(): Promise<string | null> {
+    const refreshToken = this.getRefreshToken();
+    if (!refreshToken) return null;
 
-  isLoggedIn(): boolean {
-    return !!this.getToken();
-  }
-
-  hasRole(requiredRole: 'admin' | 'manager' | 'staff'): boolean {
-    const user = this.getCurrentUser();
-    return !!user && user.role === requiredRole;
+    try {
+      const res: any = await lastValueFrom(
+        this.http.post(`${this.baseUrl}/refresh`, { refreshToken })
+      );
+      if (this.isBrowser) {
+        localStorage.setItem('accessToken', res.accessToken);
+      }
+      return res.accessToken;
+    } catch {
+      this.logout();
+      return null;
+    }
   }
 }

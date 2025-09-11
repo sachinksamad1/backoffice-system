@@ -1,0 +1,59 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+  <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+    <h2 class="text-3xl font-bold text-center text-gray-800">
+      {{ appRole | titlecase }} Login
+    </h2>
+    <form [formGroup]="form" (ngSubmit)="onLogin()" class="space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input
+          id="password"
+          formControlName="password"
+          type="password"
+          class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        />
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="form.invalid || loading"
+        class="w-full py-3 px-4 rounded-md shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Login
+      </button>
+    </form>
+    <p *ngIf="error" class="text-center text-sm text-red-500 mt-2">{{ error }}</p>
+  </div>
+</div>
+
+  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+    <h2 class="text-3xl font-bold text-center text-gray-800">Login</h2>
+    <form [formGroup]="form" (ngSubmit)="onLogin()" class="space-y-4">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input id="email" formControlName="email" type="email" class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <input id="password" formControlName="password" type="password" class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+      </div>
+
+      <button type="submit" [disabled]="form.invalid || loading" class="w-full py-3 px-4 rounded-md shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
+        Login
+      </button>
+    </form>
+    <p *ngIf="error" class="text-center text-sm text-red-500 mt-2">{{ error }}</p>
+  </div>
+</div>
