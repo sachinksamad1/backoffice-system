@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  admin-frontend:
+    build: ./apps/admin-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+
+  manager-frontend:
+    build: ./apps/manager-frontend
+    ports:
+      - "4201:80"
+    depends_on:
+      - backend
+
+  staff-frontend:
+    build: ./apps/staff-frontend
+    ports:
+      - "4202:80"
+    depends_on:
+      - backend
+
+  backend:  
+    build: ./apps/backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb_data:/data/db
+    command: mongod --noauth  # No authentication
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:
