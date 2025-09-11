@@ -1,7 +1,7 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@backoffice-system/api-client';
 
 @Component({
@@ -11,9 +11,12 @@ import { AuthService } from '@backoffice-system/api-client';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-   private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder);
   private router = inject(Router);
+   private activatedRoute = inject(ActivatedRoute);
   private authService = inject(AuthService);
+  private platformId = inject(PLATFORM_ID);
+  private isBrowser: boolean;
 
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -24,15 +27,22 @@ export class LoginComponent implements OnInit {
   error: string | null = null;
   appRole: 'admin' | 'manager' | 'staff' = 'staff'; // default
 
+  constructor() {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
+
   ngOnInit() {
-    // Detect which app is running based on pathname
-    if (location.pathname.includes('admin')) {
-      this.appRole = 'admin';
-    } else if (location.pathname.includes('manager')) {
-      this.appRole = 'manager';
-    } else {
-      this.appRole = 'staff';
+    if (this.isBrowser) {
+      if (location.pathname.includes('admin')) {
+        this.appRole = 'admin';
+      } else if (location.pathname.includes('manager')) {
+        this.appRole = 'manager';
+      } else {
+        this.appRole = 'staff';
+      }
     }
+
+    // this.appRole = this.activatedRoute.snapshot.url[0].path as 'admin' | 'manager' | 'staff' || 'staff';
 
     const token = this.authService.getAccessToken();
     if (token) {
@@ -66,13 +76,11 @@ export class LoginComponent implements OnInit {
       const userRole = payload.role;
 
       if (userRole !== this.appRole) {
-        // Role mismatch → deny access
         this.authService.logout();
         this.error = `This is the ${this.appRole} portal. Please login with a ${this.appRole} account.`;
         return;
       }
 
-      // Redirect based on role
       if (userRole === 'admin') {
         this.router.navigate(['/dashboard']);
       } else if (userRole === 'manager') {
