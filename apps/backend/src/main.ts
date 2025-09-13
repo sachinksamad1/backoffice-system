@@ -21,6 +21,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/manager', managerRoutes);
 app.use('/api/staff', staffRoutes);
+
 // Test endpoint
 app.get('/test', (req, res) => {
     res.send('Hello World from Express!');

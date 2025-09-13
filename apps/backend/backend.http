@@ -1,7 +1,7 @@
-@admin_token = eyJhbGciOi...    # paste JWT here
-@manager_token = eyJhbGciOi...
-@staff_token = eyJhbGciOi...
-@staff_id = 66f12345abcd6789ef01 # staff _id from MongoDB
+@admin_token = supersecretkey
+@manager_token = supersecretkey
+@staff_token = supersecretkey
+@staff_id = 68c331b0a3704cf432fe8488
 
 
 ### 🔐 Admin Login
