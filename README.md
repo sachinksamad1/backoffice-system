@@ -152,16 +152,19 @@ flowchart TD
     S -->|Has Credentials| U
 ```
 ### 🔎 Projet Explanation
-Admin
-- Creates/updates Managers and Staff in Users collection
-Manager
-- Belongs to a department
-- Assigns tasks to staff in their department
-Staff
-- Logs attendance (check-in/out)
-- Views/completes assigned tasks
-Database
-- Users, Tasks, and Attendance collections link everything together
+- Admin
+    - Creates/updates Managers and Staff in Users collection
+  
+- Manager
+    - Belongs to a department
+    - Assigns tasks to staff in their department
+  
+- Staff
+    - Logs attendance (check-in/out)
+    - Views/completes assigned tasks
+  
+- Database
+    - Users, Tasks, and Attendance collections link everything together
 
 ## 🗄️ Database Schema (ERD)
 ```mermaid
@@ -246,21 +249,21 @@ sequenceDiagram
 ```
 
 ### 🔎 Explanation
- - 1. User Login
+ - User Login
     - Angular app sends email/password to backend
     Backend validates against MongoDB using bcrypt
-- 2. Token Issuance
+
+- Token Issuance
     - If valid → backend signs a JWT with role + userId + department
     - Token is sent to frontend, stored in localStorage
-- 3. Protected Routes
+      
+- Protected Routes
     - Frontend attaches token in Authorization: Bearer <token>
-
     - Backend middleware verifies signature with JWT_SECRET
-- 4. Access Control
+      
+- Access Control
     - If token valid → proceed to route
     - If token invalid/expired → return 401/403
-
----
 
 ## 🏗️ System Architecture
 ```mermaid
@@ -301,19 +304,22 @@ flowchart LR
 ```
 
 ### 🔎 Explanation
-- 1. Frontend Apps (Nx Angular)
-      - admin/, manager/, and staff/ are separate Angular apps in one Nx workspace
-      - Each app has its own login & role-specific dashboard
-- 2. Backend (Node.js Express)
-      - Handles authentication, role-based access, and routes for Admin, Manager, and Staff
-      - Issues JWT tokens for secure communication
-- 3. Database (MongoDB)
-      - Users collection stores Admin, Manager, and Staff
-      - Tasks collection stores manager-assigned work for staff
-      - Attendance collection stores staff check-in/out logs
-- 4. Docker (Optional)
-      - Provides isolated containers for Backend, Frontend apps, and MongoDB
-      - Managed via docker-compose.yml
+- Frontend Apps (Nx Angular)
+    - admin/, manager/, and staff/ are separate Angular apps in one Nx workspace
+    - Each app has its own login & role-specific dashboard
+  
+- Backend (Node.js Express)
+    - Handles authentication, role-based access, and routes for Admin, Manager, and Staff
+    - Issues JWT tokens for secure communication
+  
+- Database (MongoDB)
+    - Users collection stores Admin, Manager, and Staff
+    - Tasks collection stores manager-assigned work for staff
+    - Attendance collection stores staff check-in/out logs
+  
+- Docker (Optional)
+    - Provides isolated containers for Backend, Frontend apps, and MongoDB
+    - Managed via docker-compose.yml
 
 ## 📌 Roadmap
 
