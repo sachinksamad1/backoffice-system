@@ -69,7 +69,7 @@ JWT_EXPIRES_IN=1d
 ```
 
 ## ▶️ Running the Project
-Run Backend (without Docker)
+### Run Backend (without Docker)
 ```
 npm run start:backend
 ```
@@ -85,7 +85,7 @@ npx nx serve staff
 ```
 Each runs on a separate port (4200, 4201, 4202 by default).
 
-## 🐳 Run with Docker
+### 🐳 Run with Docker
 🐳 Run with Docker
 Start Services
 ```
@@ -97,7 +97,7 @@ Stop Services
 docker-compose down
 ```
 
-## 🌱 Seeding Users
+### 🌱 Seeding Users
 Seed Script
 ```
 npm run seed:users
@@ -128,6 +128,16 @@ POST http://localhost:3000/api/staff/attendance/checkin
 Authorization: Bearer <JWT_TOKEN>
 ```
 ### 👉 Full API test requests available in `apps/backend/backend.http` (use with VS Code REST Client extension).
+
+### 👉 To Verify Token
+Run:
+```
+node verify-token.js
+```
+or (if using ES modules):
+```
+node --loader ts-node/esm verify-token.js
+```
 
 ## 🗂️ Role-Based Workflow Diagram
 ```mermaid
