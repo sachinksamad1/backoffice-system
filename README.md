@@ -75,15 +75,13 @@ npm run start:backend
 ```
 Server runs at: http://localhost:3000
 
-Server runs at: http://localhost:3000
-
 Run Frontend Apps
 ```
-npx nx serve admin
-npx nx serve manager
-npx nx serve staff
+npm run start:admin
+npm run start:manager
+npm run start:staff
 ```
-Each runs on a separate port (4200, 4201, 4202 by default).
+Each runs on a separate port (4201, 4202, 4203 by default).
 
 ### 🐳 Run with Docker
 🐳 Run with Docker
@@ -125,7 +123,7 @@ Content-Type: application/json
 Staff Check-in
 ```
 POST http://localhost:3000/api/staff/attendance/checkin
-Authorization: Bearer <JWT_TOKEN>
+Authorisation: Bearer <JWT_TOKEN>
 ```
 ### 👉 Full API test requests available in `apps/backend/backend.http` (use with VS Code REST Client extension).
 
@@ -161,9 +159,9 @@ flowchart TD
     M -->|Linked to Department| U
     S -->|Has Credentials| U
 ```
-### 🔎 Projet Explanation
+### 🔎 Project Explanation
 - Admin
-    - Creates/updates Managers and Staff in Users collection
+    - Creates/updates Managers and Staff in the Users collection
   
 - Manager
     - Belongs to a department
@@ -265,10 +263,10 @@ sequenceDiagram
 
 - Token Issuance
     - If valid → backend signs a JWT with role + userId + department
-    - Token is sent to frontend, stored in localStorage
+    - Token is sent to the frontend, stored in localStorage
       
 - Protected Routes
-    - Frontend attaches token in Authorization: Bearer <token>
+    - Frontend attaches token in Authorisation: Bearer <token>
     - Backend middleware verifies signature with JWT_SECRET
       
 - Access Control
