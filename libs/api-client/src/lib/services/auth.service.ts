@@ -6,25 +6,38 @@ import { isPlatformBrowser } from '@angular/common';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
-  private platformId = inject(PLATFORM_ID); // Inject PLATFORM_ID
+  private platformId = inject(PLATFORM_ID);
   private isBrowser: boolean;
-  private baseUrl = 'http://localhost:3000/auth';
+  private baseUrl = 'http://localhost:3000/api/auth';
 
   constructor() {
-    this.isBrowser = isPlatformBrowser(this.platformId); // Check if running in a browser
+    this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      const res: any = await lastValueFrom(
+      const res: { token?: string; refreshToken?: string; user?: any } = await lastValueFrom(
         this.http.post(`${this.baseUrl}/login`, { email, password })
       );
+      console.log('Login response:', res);
+      if (!res.token || typeof res.token !== 'string') {
+        console.error('Invalid token:', res.token);
+        return false;
+      }
+      // Note: The backend doesn't return refreshToken, so handle it conditionally
       if (this.isBrowser) {
-        localStorage.setItem('accessToken', res.accessToken);
-        localStorage.setItem('refreshToken', res.refreshToken);
+        console.log('Storing accessToken:', res.token);
+        localStorage.setItem('accessToken', res.token);
+        if (res.refreshToken) {
+          localStorage.setItem('refreshToken', res.refreshToken);
+        } else {
+          console.warn('No refreshToken in response');
+          localStorage.removeItem('refreshToken'); // Clear stale refreshToken if any
+        }
       }
       return true;
-    } catch {
+    } catch (error) {
+      console.error('Login error:', error);
       return false;
     }
   }
@@ -36,14 +49,14 @@ export class AuthService {
     }
   }
 
-  getAccessToken() {
+  getAccessToken(): string | null {
     if (this.isBrowser) {
       return localStorage.getItem('accessToken');
     }
     return null;
   }
 
-  getRefreshToken() {
+  getRefreshToken(): string | null {
     if (this.isBrowser) {
       return localStorage.getItem('refreshToken');
     }
@@ -55,14 +68,20 @@ export class AuthService {
     if (!refreshToken) return null;
 
     try {
-      const res: any = await lastValueFrom(
+      const res: { token?: string } = await lastValueFrom(
         this.http.post(`${this.baseUrl}/refresh`, { refreshToken })
       );
       if (this.isBrowser) {
-        localStorage.setItem('accessToken', res.accessToken);
+        if (res.token) {
+          localStorage.setItem('accessToken', res.token);
+          return res.token;
+        }
+        console.error('Invalid refresh response:', res);
+        return null;
       }
-      return res.accessToken;
-    } catch {
+      return null;
+    } catch (error) {
+      console.error('Refresh error:', error);
       this.logout();
       return null;
     }

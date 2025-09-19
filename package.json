@@ -4,8 +4,11 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "seed:users": "ts-node apps/backend/src/scripts/seed-users.ts",
     "start:backend": "nodemon --exec ts-node apps/backend/src/main.ts",
-    "seed:users": "ts-node apps/backend/src/scripts/seed-users.ts"
+    "start:admin": "npx nx serve admin-frontend",
+    "start:manager": "npx nx serve manager-frontend",
+    "start:staff": "npx nx serve staff-frontend"
   },
   "private": true,
   "dependencies": {

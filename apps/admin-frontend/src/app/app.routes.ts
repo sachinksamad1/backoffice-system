@@ -15,7 +15,7 @@ export const appRoutes: Route[] = [
     canActivate: [authGuard, roleGuard('admin')],
     loadComponent: () => import('./pages/users/users.component').then(m => m.UsersComponent),
   },
-  { path: 'login', component: LoginComponent },
+  { path: 'admin', component: LoginComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: '**', redirectTo: 'dashboard' },
 ];

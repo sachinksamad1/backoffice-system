@@ -1,39 +1,43 @@
 <div class="flex items-center justify-center min-h-screen bg-gray-100 p-4">
   <div class="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
     <h2 class="text-3xl font-bold text-center text-gray-800">
-      {{ appRole | titlecase }} Login
+      {{ appRole | titlecase }} Page
     </h2>
     <form [formGroup]="form" (ngSubmit)="onLogin()" class="space-y-4">
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <input
-          id="email"
-          formControlName="email"
-          type="email"
-          class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        <input id="email" formControlName="email" type="email"
+          class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
       </div>
 
       <div>
         <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <input
-          id="password"
-          formControlName="password"
-          type="password"
-          class="w-full mt-1 p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        <div class="relative mt-1">
+          <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'"
+            class="w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 pr-10" />
+          <button type="button" (click)="toggleShowPassword()"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+            <svg *ngIf="!showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <svg *ngIf="showPassword" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none"
+              viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13.875 18.841A10.088 10.088 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064-7 9.542-7a10.088 10.088 0 011.841.125m-1.841 17.84a10.088 10.088 0 01-.125-1.84m.125 1.84a10.088 10.088 0 011.84-.125M20.5 12c-1.274-4.057-5.064-7-9.542-7a10.088 10.088 0 01-1.841-.125m1.841.125A10.088 10.088 0 0112 5c4.478 0 8.268 2.943 9.542 7" />
+            </svg>
+          </button>
+        </div>
       </div>
 
-      <button
-        type="submit"
-        [disabled]="form.invalid || loading"
-        class="w-full py-3 px-4 rounded-md shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+      <button type="submit" [disabled]="form.invalid || loading"
+        class="w-full py-3 px-4 rounded-md shadow-sm text-white font-semibold bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed">
         Login
       </button>
     </form>
     <p *ngIf="error" class="text-center text-sm text-red-500 mt-2">{{ error }}</p>
   </div>
 </div>
-
-  

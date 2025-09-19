@@ -11,38 +11,38 @@ import { AuthService } from '@backoffice-system/api-client';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
+  
+  // Dependencies
   private fb = inject(FormBuilder);
   private router = inject(Router);
-   private activatedRoute = inject(ActivatedRoute);
+  private activatedRoute = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private platformId = inject(PLATFORM_ID);
-  private isBrowser: boolean;
+  
+  // Component State
+  public showPassword = false;
+  public loading = false;
+  public error: string | null = null;
+  public appRole: 'admin' | 'manager' | 'staff' = 'staff';
+  private isBrowser = false;
+  private timer: ReturnType<typeof setTimeout> | undefined;
 
+  // Form Group
   form = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', Validators.required],
   });
 
-  loading = false;
-  error: string | null = null;
-  appRole: 'admin' | 'manager' | 'staff' = 'staff'; // default
-
   constructor() {
     this.isBrowser = isPlatformBrowser(this.platformId);
-  }
+  } 
 
   ngOnInit() {
     if (this.isBrowser) {
-      if (location.pathname.includes('admin')) {
-        this.appRole = 'admin';
-      } else if (location.pathname.includes('manager')) {
-        this.appRole = 'manager';
-      } else {
-        this.appRole = 'staff';
-      }
+      console.log('URL segments:', this.activatedRoute.snapshot.url); // Debug: Log URL segments
+      this.appRole = this.activatedRoute.snapshot.url[0]?.path as 'admin' | 'manager' | 'staff' || 'staff';
+      console.log('Assigned appRole:', this.appRole); // Debug: Log appRole
     }
-
-    // this.appRole = this.activatedRoute.snapshot.url[0].path as 'admin' | 'manager' | 'staff' || 'staff';
 
     const token = this.authService.getAccessToken();
     if (token) {
@@ -50,8 +50,27 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // Feature: Password Visibility
+  public toggleShowPassword(): void {
+    this.showPassword = !this.showPassword;
+  }
+
+  // Feature: Auto-displaying Error Message
+  private displayError(message: string, duration = 10000): void {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+    this.error = message;
+    this.timer = setTimeout(() => {
+      this.error = null;
+    }, duration);
+  }
+
   async onLogin() {
-    if (this.form.invalid) return;
+    if (this.form.invalid) {
+      this.displayError('Please enter a valid email and password.');
+      return;
+    }
 
     this.loading = true;
     this.error = null;
@@ -62,11 +81,12 @@ export class LoginComponent implements OnInit {
 
     if (success) {
       const token = this.authService.getAccessToken();
+      console.log('Token:', token); // Debugging line
       if (token) {
         this.redirectUser(token);
       }
     } else {
-      this.error = 'Invalid email or password';
+      this.displayError('Invalid email or password.');
     }
   }
 
@@ -77,7 +97,8 @@ export class LoginComponent implements OnInit {
 
       if (userRole !== this.appRole) {
         this.authService.logout();
-        this.error = `This is the ${this.appRole} portal. Please login with a ${this.appRole} account.`;
+        console.log('User role mismatch:', userRole, this.appRole); // Debugging line
+        this.displayError(`This is the ${this.appRole} portal. Please log in with a ${this.appRole} account.`);
         return;
       }
 
@@ -90,7 +111,7 @@ export class LoginComponent implements OnInit {
       }
 
     } catch {
-      this.error = 'Invalid token received';
+      this.displayError('Invalid token received.');
     }
   }
 }

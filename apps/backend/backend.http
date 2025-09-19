@@ -1,7 +1,7 @@
-@admin_token = supersecretkey
-@manager_token = supersecretkey
-@staff_token = supersecretkey
-@staff_id = 68c331b0a3704cf432fe8488
+@admin_token = e.g., "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+@manager_token = e.g., "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+@staff_token = e.g., "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+@staff_id = e.g., "68c6cfee........"
 
 
 ### 🔐 Admin Login
@@ -15,23 +15,21 @@ Content-Type: application/json
 
 ###
 
-### 👨‍💼 Manager Login
+### 👨‍💼 Manager Login (Sales)
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "manager@example.com",
+  "email": "sales.manager@example.com",
   "password": "password123"
 }
-
-###
 
 ### 👷 Staff Login
 POST http://localhost:3000/api/auth/login
 Content-Type: application/json
 
 {
-  "email": "staff@example.com",
+  "email": "sales.staff1@example.com",
   "password": "password123"
 }
 

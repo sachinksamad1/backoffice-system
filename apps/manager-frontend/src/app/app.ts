@@ -8,5 +8,5 @@ import { RouterModule } from '@angular/router';
   styleUrl: './app.css',
 })
 export class App {
-  protected title = 'manager-frontend';
+  protected title = 'Manager Page';
 }
