@@ -45,3 +45,6 @@ Thumbs.db
 
 .angular
 error.log
+
+# misc
+./migrations.json

@@ -1,0 +1,26 @@
+# Node.js related
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Nx specific
+.nx/
+dist/ # Often contains build outputs that should be generated inside the container
+tmp/
+.angular/ # Angular build artifacts
+
+# Version control and editor specific
+.git/
+.gitignore
+.vscode/
+
+# Environment files and logs
+.env
+*.log
+
+# Documentation and other non-essential files
+README.md
+LICENSE
+
+# misc
+./migrations.json
